@@ -1,0 +1,98 @@
+题目描述
+小强从小就喜欢生命科学，他总是好奇花草鸟兽从哪里来的。终于， 小强上中学了，接触到了神圣的名词--DNA.它有一个双螺旋的结构。这让一根筋的小强抓破头皮，“要是能画出来就好了” 小强喊道。现在就请你帮助他吧
+
+输入
+输入包含多组测试数据。第一个整数N（N<=15）,N表示组数，每组数据包含两个整数a,b。a表示一个单位的DNA串的行数，a为奇数且 3<=a<=39。b表示重复度(1<=b<=20)。
+
+输出
+输出DNA的形状，每组输出间有一空行。
+
+样例输入
+2
+3 1
+5 4
+样例输出
+X X
+ X
+X X
+
+X   X
+ X X
+  X
+ X X
+X   X
+ X X
+  X
+ X X
+X   X
+ X X
+  X
+ X X
+X   X
+ X X
+  X
+ X X
+X   X
+
+
+代码：
+public class Main{
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();//组数
+		int x,y,a,b;
+		for(int i=0;i<n;i++) {
+			a=input.nextInt();//行数
+			b=input.nextInt();//重复数
+			for(int j=0;j<b;j++) {
+				x=a/2+1;
+				//输出半边菱形
+				for(int k=x;k>=1;k--) {
+					for(int c=1;c<=x-k;c++) {
+						System.out.print(" ");
+					}
+					for (int h = 1; h <= 2 * k - 1; h++) {
+						if (h == 1 || h == 2 * k - 1) {
+							System.out.print("X");
+						} else {
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+				//输出半边菱形
+				if(j==b-1) {//判断是否是最后一个
+					for (int k = 2; k <= x; k++) {
+						for (int c = 1; c <= x - k; c++) {
+							System.out.print(" ");
+						}
+						for (int h = 1; h <= 2 * k - 1; h++) {
+							if (h == 1 || h == 2 * k - 1) {
+								System.out.print("X");
+							} else {
+								System.out.print(" ");
+							}
+						}
+						System.out.println();
+					}
+				}else {
+					//少输出一行X
+					for (int k = 2; k<x; k++) {
+						for (int c = 1; c <= x - k; c++) {
+							System.out.print(" ");
+						}
+						for (int h = 1; h <= 2 * k - 1; h++) {
+							if (h == 1 || h == 2 * k - 1) {
+								System.out.print("X");
+							} else {
+								System.out.print(" ");
+							}
+						}
+						System.out.println();
+					}
+				}
+			}
+			System.out.println();
+		}
+	}
+}
