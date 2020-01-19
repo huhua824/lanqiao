@@ -20,7 +20,7 @@ n=0表示输入数据的结束，不做处理。
 6
 
 代码:
-public class two {
+public class Main{
 	public static void main(String[] args) {
 		Scanner input=new Scanner(System.in);
 		while(input.hasNext()) {
