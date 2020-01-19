@@ -15,7 +15,7 @@
 
 
 代码：
-public class one {
+public class Main{
 	public static void main(String[] args) {
 		Scanner input=new Scanner(System.in);
 		int s=1,k,c;
