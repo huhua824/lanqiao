@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class eleven {
+public class Main{
     public static void main(String[] args) {
     Scanner input=new Scanner (System.in);
     //用于保存之前状态，key代表状态字符串，value代表到key状态所用的最小步数 
