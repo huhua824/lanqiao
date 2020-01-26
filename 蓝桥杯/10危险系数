@@ -1,0 +1,86 @@
+题目描述
+问题描述
+抗日战争时期，冀中平原的地道战曾发挥重要作用。
+地道的多个站点间有通道连接，形成了庞大的网络。但也有隐患，当敌人发现了某个站点后，其它站点间可能因此会失去联系。
+我们来定义一个危险系数DF(x,y)：
+对于两个站点x和y  (x  !=  y),  如果能找到一个站点z，当z被敌人破坏后，x和y不连通，那么我们称z为关于x,y的关键点。相应的，对于任意一对站点x和y，危险系数DF(x,y)就表示为这两点之间的关键点个数。
+本题的任务是：已知网络结构，求两站点之间的危险系数。
+输入
+输入数据第一行包含2个整数n(2  < =  n  < =  1000),  m(0  < =  m  < =  2000),分别代表站点数，通道数； 
+接下来m行，每行两个整数  u,v  (1  < =  u,  v  < =  n;  u  !=  v)代表一条通道； 
+最后1行，两个数u,v，代表询问两点之间的危险系数DF(u,  v)。 
+输出
+一个整数，如果询问的两点不连通则输出-1.  
+样例输入
+7  6 
+1  3 
+2  3 
+3  4 
+3  5 
+4  5 
+5  6 
+1  6  
+样例输出
+2
+
+代码：
+import java.util.Scanner;
+
+public class Main{
+	static int[] visit;      //记录点有没有被访问
+	static int[] wayPoint;   //记录当前这条路径访问的所有点
+	static int[] pointNum;   //记录所有路径上点经过的次数
+	static int allWay;		 //所有的路径数
+	static int[][] map;      //遍历图
+	static int n;            //点个数
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		n=input.nextInt();   //得到点的个数
+		int m=input.nextInt();  //得到边的个数
+		visit =new int[n+1];    //根据点个数创建一维数组
+		for(int i=0;i<=n;i++) {
+			visit[i]=0;  //初始化
+		}
+		wayPoint=new int[n+1];
+		pointNum=new int[n+1];
+		for(int i=0;i<=n;i++) {
+			pointNum[i]=0;
+		}
+		map=new int[n+1][n+1];
+		for(int i=0;i<m;i++) {
+			int p1=input.nextInt();
+			int p2=input.nextInt();
+			map[p1][p2]=1;
+			map[p2][p1]=1;
+		}
+		int s=input.nextInt();
+		int t=input.nextInt();
+		dfs(s,t,0);
+		int sum=0;
+		for(int i=0;i<=n;i++) {
+			if(pointNum[i]==allWay) {
+				sum++;
+			}
+		}
+		System.out.println(sum-2); //减去起始两个点
+	}
+	
+	static void dfs(int s,int t,int step) {
+		visit[s]=1;  //标记访问当前的点
+		wayPoint[step]=s;  //记录这条路径的点
+		
+		if(s==t) { //说明已经访问到头
+			allWay++;  
+			for(int i=0;i<=step;i++) {
+				pointNum[wayPoint[i]]++; //把这条路线上依次访问的点，次数加一
+			}
+		}
+		for(int i=0;i<=n;i++) {
+			if(map[s][i]==1&&visit[i]==0) { //如果有边而且没有访问过
+				visit[i]=1;   // 标记访问到了
+				dfs(i,t,step+1);  //在从这个点访问之后的点是否有边
+				visit[i]=0; 
+			}
+		}
+	}
+}
