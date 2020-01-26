@@ -1,0 +1,87 @@
+题目描述
+历届试题  剪格子 
+时间限制：1.0s     内存限制：256.0MB
+    
+问题描述
+如下图所示，3  x  3  的格子中填写了一些整数。
++--*--+--+
+|10*  1|52|
++--****--+
+|20|30*  1|
+*******--+
+|  1|  2|  3|
++--+--+--+ 
+我们沿着图中的星号线剪开，得到两个部分，每个部分的数字和都是60。
+本题的要求就是请你编程判定：对给定的m  x  n  的格子中的整数，是否可以分割为两个部分，使得这两个区域的数字和相等。
+如果存在多种解答，请输出包含左上角格子的那个区域包含的格子的最小数目。 
+如果无法分割，则输出  0。
+输入
+程序先读入两个整数  m  n  用空格分割  (m,n< 10)。 
+表示表格的宽度和高度。 
+接下来是n行，每行m个正整数，用空格分开。每个整数不大于10000。 
+输出
+输出一个整数，表示在所有解中，包含左上角的分割区可能包含的最小的格子数目。 
+样例输入
+3  3 
+10  1  52 
+20  30  1 
+1  2  3  
+样例输出
+3
+
+代码：
+public class Main{
+	static int map[][]=new int[11][11];//数表
+	static int vis[][]=new int[11][11];
+	static int df[][]= {{0,-1},{1,0},{-1,0},{0,1}};
+	static int m,n; //边界值 
+	static int minStep=100,sum=0;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		//标记访问数组初始化 
+		for(int i=0;i<11;i++) {
+			for(int j=0;j<11;j++) {
+				vis[i][j]=0;
+			}
+		}
+		n=input.nextInt();
+		m=input.nextInt();
+		for(int i=1;i<=m;i++) {
+			for(int j=1;j<=n;j++) {
+				map[i][j]=input.nextInt();//格子数
+				sum+=map[i][j];//求总和 
+			}
+		}
+		if(sum%2==1||(n==0&&m==0)) {//总和为奇数或者格子数为0  —无法分割
+			System.out.println("0");
+			System.exit(1);
+		}
+		if(map[1][1]==sum/2) { //一个格子就满足情况 
+			System.out.println("1");
+			System.exit(1);
+		}
+		sum/=2;dfs(0,1,1,0);
+		if(minStep>0) {
+			System.out.println(minStep+1);//最后得到格子数需要加上map[1][1]这个格子本身 
+		}else {
+			System.out.println("0");
+		}
+	}
+	static void dfs(int s,int x,int y,int step) {
+		if(x>=1&&x<=m&&y>=1&&y<=n) {//检查是否在有效边界内 
+			if(vis[x][y]==0) {
+				vis[x][y]=1;  //标记访问 
+				s+=map[x][y];
+				if(s==sum) {
+					minStep=minStep>step?step:minStep;//剪格子成功，统计最小步数（个数） 
+				}else if(s<sum){
+					for(int i=0;i<4;i++) {
+						dfs(s,x+df[i][0],y+df[i][1],step+1);
+					}
+					
+				}
+				vis[x][y]=0; //回溯到上一步（即要还原当前一步操作） 
+			}
+		}
+	}
+}
