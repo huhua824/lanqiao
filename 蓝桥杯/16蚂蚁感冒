@@ -1,0 +1,59 @@
+题目描述
+长100厘米的细长直杆子上有n只蚂蚁。它们的头有的朝左，有的朝右。
+
+每只蚂蚁都只能沿着杆子向前爬，速度是1厘米/秒。
+
+当两只蚂蚁碰面时，它们会同时掉头往相反的方向爬行。
+
+这些蚂蚁中，有1只蚂蚁感冒了。并且在和其它蚂蚁碰面时，会把感冒传染给碰到的蚂蚁。
+
+请你计算，当所有蚂蚁都爬离杆子时，有多少只蚂蚁患上了感冒。
+输入
+第一行输入一个整数n  (1  <   n  <   50),  表示蚂蚁的总数。 
+
+接着的一行是n个用空格分开的整数  Xi  (-100  <   Xi  <   100),  Xi的绝对值，表示蚂蚁离开杆子左边端点的距离。正值表示头朝右，负值表示头朝左，数据中不会出现0值，也不会出现两只蚂蚁占用同一位置。其中，第一个数  据代表的蚂蚁感冒了。
+输出
+要求输出1个整数，表示最后感冒蚂蚁的数目。 
+样例输入
+5 
+-10  8  -20  12  25 
+样例输出
+3
+
+代码：
+public class Main{
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		int[] a=new int[n];
+		for(int i=0;i<n;i++) {
+			a[i]=input.nextInt();
+		}
+		int ans=1,c=0;
+		boolean flag=false;
+		for(int i=1;i<n;i++) {
+			if(a[0]<0) { //首只蚂蚁向左
+				if(a[i]>0&&a[i]<Math.abs(a[0])) { //左边所有向右蚂蚁都感冒,有蚂蚁感冒则flag变为true
+					flag=true;
+					ans++;
+				}
+				if(a[i]<0&&Math.abs(a[i])>Math.abs(a[0])) {//当左边向右的蚂蚁有感冒(flag=true)时，则右边所有向左蚂蚁都感冒
+					c++; 
+				}
+			}
+			if(a[0]>0) { //首只蚂蚁向右
+				if(a[i]<0&&Math.abs(a[i])>a[0]) { //右边所有向左蚂蚁都感冒,有蚂蚁感冒则flag变为true
+					flag=true;
+					ans++;
+				}
+				if(a[i]>0&&a[i]<a[0]) { //当左边向右的蚂蚁有感冒(flag=true)时，则右边所有向左蚂蚁都感冒
+					c++;
+				}
+			}
+		}
+		if(flag) {
+			ans+=c;
+		}
+		System.out.println(ans);
+	}
+}
