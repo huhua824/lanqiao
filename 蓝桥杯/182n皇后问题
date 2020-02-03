@@ -1,0 +1,83 @@
+题目描述
+给定一个n*n的棋盘，棋盘中有一些位置不能放皇后。现在要向棋盘中放入n个黑皇后和n个白皇后，使任意的两个黑皇后都不在同一行、同一列或同一条对角线上，任意的两个白皇后都不在同一行、同一列或同一条对角线上。问总共有多少种放法？n小于等于8。
+输入
+输入的第一行为一个整数n，表示棋盘的大小。 
+
+接下来n行，每行n个0或1的整数，如果一个整数为1，表示对应的位置可以放皇后，如果一个整数为0，表示对应的位置不可以放皇后。 
+输出
+输出一个整数，表示总共有多少种放法。 
+样例输入
+4 
+
+1  1  1  1 
+
+1  1  1  1 
+
+1  1  1  1 
+
+1  1  1  1 
+样例输出
+2
+
+代码：
+public class Main{
+	static int[][] map=new int[10][10];  //图表
+	static int[][] vis=new int[10][10];  //记录走过的点
+	static int[] q_w=new int[10];        //记录第i行第几列排的白皇后
+	static int[] q_b=new int[10];		//记录第i行第几列排的黑皇后
+	static int n,sum=0;;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		n=input.nextInt();
+		for(int i=0;i<n;i++) {
+			for(int j=0;j<n;j++) {
+				map[i][j]=input.nextInt();  
+				vis[i][j]=0;    //初始化vis数组
+			}
+		}
+		Arrays.fill(q_w, 0);
+		Arrays.fill(q_b, 0);
+		dfs_b(0);   //从第0行开始
+		System.out.println(sum);
+		
+	}
+	static void dfs_b(int r) {//搜索黑皇后  
+		if(r==n) {  
+			dfs_w(0); //黑皇后排满后排白皇后，从第0行开始
+		}else {
+			for(int i=0;i<n;i++) {   //列
+				if(vis[r][i]==0&&map[r][i]==1&&check(q_b,r,i)) {
+					q_b[r]=i; //记录r行的第i列排的皇后
+					vis[r][i]=1;
+					dfs_b(r+1);
+					vis[r][i]=0;
+				}
+			}
+		}
+	}
+	
+	static void dfs_w(int r) {//搜索白皇后  
+		if(r==n) {
+			sum++;
+		}else {
+			for(int i=0;i<n;i++) {  //列
+				if(vis[r][i]==0&&map[r][i]==1&&check(q_w,r,i)) {
+					q_w[r]=i; //记录r行的第i列排的皇后
+					vis[r][i]=1;
+					dfs_w(r+1);
+					vis[r][i]=0;
+				}
+			}
+		}
+	}
+	static boolean check(int q[],int r,int c) {//判断位置是否合法  
+		for(int i=0;i<r;i++) {
+			int cur_r=i;
+			int cur_c=q[i];
+			if((c-cur_c==0)||(Math.abs(r-cur_r)==Math.abs(c-cur_c))) { //排除同列和对角线
+				return false;
+			}
+		}
+		return true;
+	}
+}
