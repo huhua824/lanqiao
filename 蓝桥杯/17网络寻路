@@ -1,0 +1,67 @@
+题目描述
+X  国的一个网络使用若干条线路连接若干个节点。节点间的通信是双向的。某重要数据包，为了安全起见，必须恰好被转发两次到达目的地。该包可能在任意一个节点产生，我们需要知道该网络中一共有多少种不同的转发路径。
+源地址和目标地址可以相同，但中间节点必须不同。
+如下图所示的网络。
+
+1  ->   2  ->   3  ->   1  是允许的
+1  ->   2  ->   1  ->   2  或者  1  ->   2  ->   3  ->   2  都是非法的。
+输入
+输入数据的第一行为两个整数N  M，分别表示节点个数和连接线路的条数(1< =N< =10000;  0< =M< =100000)。 
+接下去有M行，每行为两个整数  u  和  v，表示节点u  和  v  联通(1< =u,v< =N  ,  u!=v)。 
+输入数据保证任意两点最多只有一条边连接，并且没有自己连自己的边，即不存在重边和自环。 
+输出
+输出一个整数，表示满足要求的路径条数。
+样例输入
+4  4 
+1  2 
+2  3 
+3  1 
+1  4  
+样例输出
+10
+
+代码：
+public class Main{
+	static boolean vis[]=new boolean[10010];//记录走过的节点
+	static ArrayList<ArrayList<Integer>> map=new ArrayList<ArrayList<Integer>>();//邻接表
+	static int ans=0;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		int m=input.nextInt();
+		for(int i=0;i<=n;i++) { //初始化节点,去掉下标为0的节点(置为-1)
+			map.add(new ArrayList<Integer>());
+			map.get(i).add(-1);
+		}
+		for(int i=1;i<=m;i++) {
+			int u=input.nextInt();
+			int v=input.nextInt();
+			map.get(u).add(v);
+			map.get(v).add(u);
+		}
+		Arrays.fill(vis, false); //初始化数组vis 
+		for(int i=1;i<=n;i++) {
+			vis[i]=true;
+			dfs(i,1,i);
+			vis[i]=false;
+		}
+	System.out.println(ans);
+	}
+	static void dfs(int cur,int step,int root) { //cur：当前节点，step：节点数，root:第一个节点
+		if(step==3) {  //当节点数正好为3时
+			for(int i=1;i<map.get(cur).size();i++) {
+				if(!vis[map.get(cur).get(i)]||map.get(cur).get(i)==root) {  //判断第四个节点是否为第一个节点或者是没有走过的节点
+					ans++;
+				}
+			}
+		}else{
+			for(int i=1;i<map.get(cur).size();i++) {
+				if(!vis[map.get(cur).get(i)]) {
+					vis[map.get(cur).get(i)]=true;
+					dfs(map.get(cur).get(i),step+1,root);
+					vis[map.get(cur).get(i)]=false;
+				}
+			}
+		}
+	}
+}
