@@ -1,0 +1,104 @@
+题目描述
+给定一个N阶矩阵A，输出A的M次幂（M是非负整数）
+
+例如：
+
+A  =
+
+1  2
+
+3  4
+
+A的2次幂
+
+7  10
+
+15  22
+输入
+第一行是一个正整数N、M（1< =N< =30,  0< =M< =5），表示矩阵A的阶数和要求的幂数 
+
+接下来N行，每行N个绝对值不超过10的非负整数，描述矩阵A的值 
+输出
+输出共N行，每行N个整数，表示A的M次幂所对应的矩阵。相邻的数之间用一个空格隔开 
+样例输入
+2  2 
+
+1  2 
+
+3  4 
+样例输出
+7 10
+15 22
+
+（1）方阵的0次幂，是单位矩阵，即正对角线上的值都为1，其他值为0；
+
+ （2）方阵乘法：举个例子吧
+
+  矩阵  1   2          乘       矩阵   1   2          等于  1x1+2x3   1x2+2x4      即     7    10
+
+        3   4                         3   4                3x1+4x3   3x2+4x4             15   22
+
+代码：
+
+public class Main{
+	static int n;
+	static int[][] a;
+	static int[][] b;
+	static int[][] t;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		n=input.nextInt();
+		int m=input.nextInt();
+		a=new int[n][n];
+		b=new int[n][n];
+		t=new int[n][n];
+		for(int i=0;i<n;i++) {
+			for(int j=0;j<n;j++) {
+				int k=input.nextInt();
+				a[j][i]=k;
+				b[i][j]=k;
+			}
+		}
+		function(m);
+		for(int i=0;i<n;i++) {
+			for(int j=0;j<n;j++) {
+				if(j!=n-1) {
+					System.out.print(b[i][j]+" ");
+				}else {
+					System.out.print(b[i][j]);
+				}
+			}
+			System.out.println();
+		}
+	}
+	static void function(int m) {
+		while(m>1) {
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					int temp=0;
+					for(int h=0;h<n;h++) {
+						temp+=b[i][h]*a[j][h];
+					}
+					t[i][j]=temp;
+				}
+			}
+			m--;
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					b[i][j]=t[i][j];
+				}
+			}
+		}
+		if(m==0) {
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					if(i==j) {
+						b[i][j]=1;
+					}else {
+						b[i][j]=0;
+					}
+				}
+			}
+		}
+	}
+}
