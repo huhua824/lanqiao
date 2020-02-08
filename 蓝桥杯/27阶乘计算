@@ -1,0 +1,83 @@
+题目描述
+输入一个正整数n，输出n!的值。
+
+其中n!=1*2*3*…*n。
+
+算法描述
+
+n!可能很大，而计算机能表示的整数范围有限，需要使用高精度计算的方法。使用一个数组A来表示一个大整数a，A[0]表示a的个位，A[1]表示a的十位，依次类推。
+
+将a乘以一个整数k变为将数组A的每一个元素都乘以k，请注意处理相应的进位。
+
+首先将a设为1，然后乘2，乘3，当乘到n时，即得到了n!的值。
+输入
+输入包含一个正整数n，n< =1000。 
+输出
+输出n!的准确值。
+样例输入
+10 
+样例输出
+3628800
+
+代码：
+方法一：
+public class Main{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n=scanner.nextInt();
+        BigInteger bi=new BigInteger("1");
+        f(n,bi);
+    }
+    private static void f(int n, BigInteger bi) {
+        if(n<=0)
+        return; 
+        bi=bi.multiply(new BigInteger(String.valueOf(n)));
+        System.out.println(bi);
+        if(n==1){
+            System.out.println(bi);
+        }
+        f(n-1,bi);
+    }
+}
+
+方法二：
+public class Main{
+	static int[] a;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		a=new int[5000];
+		Arrays.fill(a, -1);
+		int len=funtion(n);
+		for(int i=len-1;i>=0;i--) {
+			System.out.print(a[i]);
+		}
+	}
+	static int funtion(int n) {
+		int len=1,p,jw;
+		a[0]=1;
+		for(int i=1;i<=n;i++) {
+			len=0;p=0;jw=0;
+			while(a[p]!=-1) {
+				a[p]*=i;
+				a[p]+=jw;
+				jw=0;
+				if(a[p]>=10) {
+					jw=a[p]/10;
+					a[p]%=10;
+					
+				}
+				p++;
+				len++;
+			}
+			if(jw!=0) {
+				while(jw>0) {
+					a[p++]=jw%10;
+					jw/=10;
+					len++;
+				}
+			}
+		}
+		return len;
+	}
+}
