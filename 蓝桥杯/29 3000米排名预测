@@ -1,0 +1,96 @@
+题目描述
+3000米长跑时，围观党们兴高采烈地预测着  最后的排名。因为他们来自不同的班，对所有运动员不一定都了解，于是他们分别对自己了解的一些运动员的实力作出了评估，即对部分运动员做了相对排名的预  测，并且告诉了可怜留守的班长。因为无聊，于是他们就组团去打Dota去了。比赛结束后他们向班长询问最后的排名，但班长不记得了，只记得他们中哪些人的  预测是正确的，哪些人的预测是错误的。他们想知道比赛的排名可能是什么。
+
+数据规模和约定
+  1< =n< =10,  2< =c< =n,  1< =m< =10，保证数据合法，且答案中排名可能数不超过20000。对于一个排名序列，一个预测是正确的，当且仅当预测的排名的相对顺序  是排名序列的一个子序列。一个预测是错误的，当且仅当这个预测不正确。
+输入
+第一行两个整数n，  m，n为运动员数量，m为围观党数量。运动员编号从0到n-1。 
+接下来m行，每行为一个围观党的相对排名预测。每行第一个数c表示他预测的人数，后面跟着c个0~n-1的不同的数，表示他预测的运动员相对排名，最后还有一个数，0表示这个预测是错误的，1表示是正确的。 
+输出
+第一行一个数k为有多少种排名的可能。 
+下面k行，每行一个0~n-1的排列，为某一个可能的排名，相邻的数间用空格隔开。所有排名按字典序依次输出。 
+样例输入
+3 2 
+2 0 1 1 
+2 1 2 0 
+样例输出
+2
+0 2 1 
+2 0 1 
+
+代码：
+public class thirtyFive {
+	static int n,m,k=0;
+	static int[][] c,ans;
+    static int[] vis,a,p;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		n=input.nextInt();
+		m=input.nextInt();
+		c=new int[15][15];  //记录围观者预测  ,c[i][0]为预测的人数
+		ans=new int[20005][15];  //记录满足要求的排名
+		vis=new int[15];   //记录排过标记
+		a=new int[15];     //当前按队员编号排名序列
+		p=new int[15];     //记录按队员编号对应的名次序列
+		Arrays.fill(vis, 0);
+		for(int i=1;i<=m;i++) {
+			c[i][0]=input.nextInt(); //c[i][0]表示 预测m个人 
+			for(int j=1;j<=c[i][0]+1;j++) {
+				c[i][j]=input.nextInt();
+			}
+		}
+		dfs(0);
+		System.out.println(k);
+		for(int i=0;i<k;i++) {
+			for(int j=0;j<n;j++) {
+				if(j!=n-1) {
+					System.out.print(ans[i][j]+" ");
+				}else {
+					System.out.print(ans[i][j]);
+				}
+			}
+			System.out.println();
+		}
+	}
+	static void dfs(int step) {//全排列
+		if(step==n) {
+			if(!judge()) {
+				return;
+			}
+			
+			for(int i=0;i<n;i++) {
+				ans[k][i]=a[i];
+			}
+			k++;
+		}else {
+			for(int i=0;i<n;i++) {
+				if(vis[i]==0) {
+					vis[i]=1;
+					a[step]=i;
+					dfs(step+1);
+					vis[i]=0;
+				}
+			}
+		}
+	}
+	static boolean judge() {
+		for(int i=0;i<n;i++) {
+			p[a[i]]=i;  //记录运动编号对应排名  如队员编号排名为2 0 1，那么对应排名为1 2 0(p[2]=0,p[0]=1,p[1]=2)
+		}
+		for(int i=1;i<=m;i++) {
+			int t=0;
+			for(int j=1;j<c[i][0];j++) {
+				if(c[i][c[i][0]+1]==1&&p[c[i][j]]>p[c[i][j+1]]) {
+					return false;
+				}
+				if(c[i][c[i][0]+1]==0&&p[c[i][j]]<p[c[i][j+1]]) {//推测为假则完全按照此推序列为假
+					t++;
+				}
+			}
+			if(t==c[i][0]-1) { //预测 m 个人 匹配 m-1次 t==c[i][0]-1则表示完全 按此推测排序 
+				return false;
+			}
+		}
+		return true;
+	}
+}
