@@ -1,0 +1,55 @@
+题目描述
+7254是一个不寻常的数，因为它可以表示为7254  =  39  x  186，这个式子中1~9每个数字正好出现一次
+输出所有这样的不同的式子（乘数交换被认为是相同的式子）
+结果小的先输出；结果相同的，较小的乘数较小的先输出。
+输入
+无
+输出
+每一行输出一个式子，式子中的等号前后空格、乘号（用字母x代表）前后空格 
+较小的乘数写在前面 
+样例输入
+无
+样例输出
+问题中的式子在结果中会出现一行如下： 
+7254  =  39  x  186 
+
+代码：
+
+public class Main {
+	static int[] vis,a;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		vis=new int[10];
+		a=new int[10];
+		Arrays.fill(vis, 0);
+		dfs(1);
+	}
+	static void dfs(int step) {
+		if(step==10) {
+			for(int i=5;i<=6;i++) {
+				int x=getNum(5,i);
+				int y=getNum(i+1,9);
+				if(getNum(1,4)==x*y) {
+					System.out.println(getNum(1,4)+" = "+x+" x "+y);
+				}
+			}
+			return;
+		}else {
+			for(int i=1;i<=9;i++) {
+				if(vis[i]==0) {
+					vis[i]=1;
+					a[step]=i;
+					dfs(step+1);
+					vis[i]=0;
+				}
+			}
+		}
+	}
+	static int getNum(int x,int y) {
+		int num=0;
+		for(int i=x;i<=y;i++) {
+			num=num*10+a[i];
+		}
+		return num;
+	}
+}
