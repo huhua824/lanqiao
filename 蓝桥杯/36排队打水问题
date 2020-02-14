@@ -1,0 +1,43 @@
+题目描述
+有n个人排队到r个水龙头去打水，他们装满水桶的时间t1、t2………..tn为整数且各不相等，应如何安排他们的打水顺序才能使他们总共花费的时间最少？
+
+数据规模和约定
+其中80%的数据保证n< =10
+
+
+
+输入
+第一行n，r  (n< =500,r< =75) 
+第二行为n个人打水所用的时间Ti  (Ti< =100)；
+输出
+最少的花费时间 
+样例输入
+3  2 
+1  2  3 
+样例输出
+7
+代码：
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		int r=input.nextInt();
+		int[] a=new int[n];
+		int[] b=new int[r];
+		int ans=0,sum=0;
+		for(int i=0;i<n;i++) {
+			a[i]=input.nextInt();
+			sum+=a[i];
+		}
+		Arrays.sort(a);
+		int j=0;
+		while(j<n-r) {
+			for(int i=0;j<n-r&&i<r;j++,i++) {
+				b[i]+=a[j];
+				ans+=b[i];
+			}
+		}
+		System.out.println(ans+sum);
+	}
+}
