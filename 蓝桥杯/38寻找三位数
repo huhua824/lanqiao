@@ -1,0 +1,52 @@
+题目描述
+将1，2，…，9共9个数分成三组，分别组成三个三位数，且使这三个三位数构成
+1：2：3的比例，试求出所有满足条件的三个三位数。
+例如：三个三位数192，384，576满足以上条件。
+输入
+无输入文件 
+输出
+输出每行有三个数，为满足题设三位数。各行为满足要求的不同解。 
+样例输入
+无
+样例输出
+无
+
+代码：
+
+public class Main {
+	static int[] vis,p;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		vis=new int[10];
+		p=new int[10];
+		Arrays.fill(vis, 0);
+		dfs(1);
+	}
+	static void dfs(int step) {
+		if(step==10) {
+			int a=getNum(1,3);
+			int b=getNum(4,6);
+			int c=getNum(7,9);
+			if(a==b/2&&a==c/3) {
+				System.out.println(a+" "+b+" "+c);
+			}
+			return;
+		}else {
+			for(int i=1;i<=9;i++) {
+				if(vis[i]==0) {
+					vis[i]=1;
+					p[step]=i;
+					dfs(step+1);
+					vis[i]=0;
+				}
+			}
+		}
+	}
+	static int getNum(int x,int y) {
+		int num=0;
+		for(int i=x;i<=y;i++) {
+			num=num*10+p[i];
+		}
+		return num;
+	}
+}
