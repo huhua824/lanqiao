@@ -1,0 +1,75 @@
+问题描述
+　　给定n个十六进制正整数，输出它们对应的八进制数。
+
+输入格式
+　　输入的第一行为一个正整数n （1<=n<=10）。
+　　接下来n行，每行一个由0~9、大写字母A~F组成的字符串，表示要转换的十六进制正整数，每个十六进制数长度不超过100000。
+
+输出格式
+　　输出n行，每行为输入对应的八进制正整数。
+
+　　【注意】
+　　输入的十六进制数不会有前导0，比如012A。
+　　输出的八进制数也不能有前导0。
+
+样例输入
+　　2
+　　39
+　　123ABC
+
+样例输出
+　　71
+　　4435274
+
+代码：
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+public class tt{
+	public  static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		List<StringBuffer> sixteen=new ArrayList<StringBuffer>();//存16进制
+		List<StringBuffer> two=new ArrayList<StringBuffer>(); //存2进制
+		StringBuffer t,bf,bz; 
+		for(int i=0;i<n;i++) {
+			sixteen.add(new StringBuffer(input.next()));
+		}
+		String str="";
+		String br="";
+		for(int i=0;i<n;i++) {
+			t=new StringBuffer();//当前二进制
+			bf=new StringBuffer();//当前反序列八进制
+			bz=new StringBuffer();//当前正序列八进制
+			str=sixteen.get(i)+"";
+			for(int j=0;j<str.length();j++) {
+				
+				br=Integer.toBinaryString(Integer.valueOf(str.charAt(j)+"",16));
+				while(br.length()<4&&j!=0) {
+					br="0"+br;
+				}
+				t.append(br);
+			}
+			int num=0,count=0,sum=0;
+			for(int j=t.length()-1;j>=0;j--) {
+				num=Integer.parseInt(t.charAt(j)+"")*(int)Math.pow(2, count++);
+				sum+=num;
+				if(count%3==0) {
+					bf.append(sum);
+					count=0;sum=0;
+				}
+			}
+			if(count!=0) {
+				bf.append(sum);
+			}
+			for(int j=bf.length()-1;j>=0;j--) {
+				bz.append(bf.charAt(j));
+			}
+			two.add(bz);
+		}
+		for(int i=0;i<two.size();i++) {
+			System.out.println(two.get(i));
+		}
+	}
+}
