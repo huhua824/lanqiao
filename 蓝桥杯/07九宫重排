@@ -64,3 +64,60 @@ public class Main{
     	System.out.println(result);
     }
 }  
+
+
+
+public class Main{
+	static String start;
+	static String end;
+	static int[] dir={-3,3,-1,1};
+	static int n,m;
+	static LinkedList<String> list;
+	public  static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		start=input.next();
+		end=input.next();
+		list=new LinkedList<String>();
+		System.out.println(new Main().bfs());
+	}
+	class Node{
+		String s;
+		int d;
+		public Node(String s,int d) {
+			this.s=s;
+			this.d=d;
+		}
+	}
+	public int bfs() {
+		Queue<Node> q=new LinkedList<Node>();
+ 		q.offer(new Node(start,0));
+ 		list.add(start);
+		while(!q.isEmpty()) {
+		    Node now=q.poll();
+		    int index=now.s.indexOf(".");
+		    for(int i=0;i<4;i++) {
+		    	 int temp=index+dir[i];
+		    	if(in(temp,index)){
+		    		String change=now.s.replace('.', '*');
+	    			change=change.replace(now.s.charAt(temp), '.');
+	    			change=change.replace('*',now.s.charAt(temp));
+	    			if(change.equals(end)) {
+	    				return now.d+1;
+	    			}
+	    			if(!list.contains(change)) {
+	    				//System.out.println(change);
+	    				q.offer(new Node(change,now.d+1));
+	    				list.add(change);
+	    			}
+		    	}
+		    }
+		}
+		return -1;
+	}
+	static boolean in(int temp,int index) {
+		return temp<=8&&temp>=0&&(temp%3==index%3||temp/3==index/3);
+	}
+	
+}
+
+
