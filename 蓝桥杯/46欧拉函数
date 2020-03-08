@@ -1,0 +1,42 @@
+题目描述
+给定一个大于1，不超过2000000的正整数n，输出欧拉函数，phi(n)的值。
+如果你并不了解欧拉函数，那么请参阅提示。
+
+提示
+欧拉函数phi(n)是数论中非常重要的一个函数，其表示1到n-1之间，与n互质的数的个数。显然的，我们可以通过定义直接计算phi(n)。
+当然，phi(n)还有这么一种计算方法。
+首先我们对n进行质因数分解，不妨设n=p1^a1  *  p2^a2  *  ...  *  pk^ak  （这里a^b表示a的b次幂，p1到pk为k个互不相同的质数，a1到ak均为正整数），那么
+phi(n)=n(1-(1/p1))(1-(1/p2))....(1-(1/pk))
+稍稍化简一下就是
+phi(n)=n(p1-1)(p2-1)...(pk-1)/(p1*p2*...*pk)
+
+计算的时候小心中间计算结果超过int类型上界，可通过调整公式各项的计算顺序避免(比如先做除法)!
+
+输入
+在给定的输入文件中进行读入： 
+一行一个正整数n。 
+输出
+将输出信息输出到指定的文件中: 
+一行一个整数表示phi(n)。 
+样例输入
+17 
+样例输出
+16
+
+代码：
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while(in.hasNext()) {
+            int n = in.nextInt();
+            int ans = n;
+            for(int i = 2;i*i<=n;i++) {
+                if(n%i == 0) ans = ans / i * (i-1);
+                while(n%i == 0) n/=i;
+            }
+        if(n!=1) ans = ans/n*(n-1);
+            System.out.println(ans);
+        }
+        in.close();
+    }
+}
