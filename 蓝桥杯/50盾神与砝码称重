@@ -1,0 +1,57 @@
+题目描述
+有一天，他在宿舍里无意中发现了一个天平！这  个天平很奇怪，有n个完好的砝码，但是没有游码。盾神为他的发现兴奋不已！于是他准备去称一称自己的东西。他准备好了m种物品去称。神奇的是，盾神一早就  知道这m种物品的重量，他现在是想看看这个天平能不能称出这些物品出来。但是盾神稍微想了1秒钟以后就觉得这个问题太无聊了，于是就丢给了你。
+
+数据规模和约定
+1< =n< =24,  1< =m< =10.
+输入
+第一行为两个数，n和m。 
+第二行为n个数，表示这n个砝码的重量。 
+第三行为m个数，表示这m个物品的重量。 
+输出
+输出m行，对于第i行，如果第i个物品能被称出，输出YES否则输出NO。 
+样例输入
+4  2 
+1  2  4  8 
+15  16 
+样例输出
+YES
+NO
+
+代码：
+
+public class Main {
+	static int a[];
+	static boolean flag;
+	static int value,n;
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		n=input.nextInt();
+		int m=input.nextInt();
+		a=new int[n];
+		for(int i=0;i<n;i++) {
+			a[i]=input.nextInt();
+		}
+		while(m-->0) {
+			flag=false;
+			value=input.nextInt();
+			dfs(0,0);
+			if(flag) {
+				System.out.println("YES");
+			}else {
+				System.out.println("NO");
+			}
+		}
+	}
+	static void dfs(int step,int sum) {
+		if(sum==value) {
+			flag=true;
+			return;
+		}
+		if(step==n) {
+			return;
+		}
+		dfs(step+1,sum+a[step]);
+		dfs(step+1,sum);
+		dfs(step+1,sum-a[step]);
+	}
+}
