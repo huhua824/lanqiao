@@ -1,0 +1,53 @@
+题目描述
+n个色盲聚在一  起，讨论一块布的颜色。尽管都是色盲，却盲得各不相同。每个人都有自己的主张，争论不休。最终，他们决定采取民主投票的方式决定布的颜色，不管布同不同  意。某种颜色用字符串表示(字符串为颜色单词或词组，也就是可能有被空格隔开的两个单词组成的颜色词组)，只要字符串不同，程序即判断颜色不同。现在给出  这n个人所选择的颜色，输出最有可能的颜色（也就是获得投票最多的颜色），如果有多个颜色获得了最多的投票，则将它们按字典序分行全部输出。
+
+数据规模和约定
+n< =1000
+颜色单词最多20个字符，只包含小写字母或者空格
+输入
+第一行一个正整数n，表示色盲的人数 
+接下来n行，每行一句话 
+输出
+若干行，获得投票最多的颜色，按字典序输出 
+样例输入
+5 
+red 
+blue 
+black 
+black 
+blue 
+样例输出
+black
+blue
+
+代码：
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		int n=input.nextInt();
+		input.nextLine();
+		String[] s=new String[n];
+		for(int i=0;i<n;i++) {
+			s[i]=input.nextLine();
+		}
+		int max=0;
+		Map<String,Integer> map=new TreeMap<String,Integer>();
+		for(int i=0;i<n;i++) {
+			if(!map.containsKey(s[i])) {
+				map.put(s[i], 1);
+			}else {
+				map.put(s[i], map.get(s[i])+1);
+			}
+			if(map.get(s[i])>max) {
+				max=map.get(s[i]);
+			}
+		}
+		for(String ss:map.keySet()) {
+			int count=map.get(ss);
+			if(max==count) {
+				System.out.println(ss);
+			}
+		}
+	}
+}
