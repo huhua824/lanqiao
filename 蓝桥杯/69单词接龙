@@ -1,0 +1,99 @@
+题目描述
+单词接龙是一个与我们经常玩的成语接龙相类似的游戏，现在我们已知一组单词，且给定一个开头的字母，要求出以这个字母开头的最长的“龙”（每个单词都  最多在“龙”中出现两次），在两个单词相连时，其重合部分合为一部分，例如beast和astonish，如果接成一条龙则变为beastonish，另外相邻的两部分不能存在包含关系，例如at和atide间不能相连。
+
+样例说明
+连成的“龙”为atoucheatactactouchoose
+
+输入
+输入的第一行为一个单独的整数n  (n< =20)表示单词数，以下n行每行有一个单词，输入的最后一行为一个单个字符，表示“龙”开头的字母。你可以假定以此字母开头的“龙”一定存在. 
+输出
+只需输出以此字母开头的最长的“龙”的长度 
+样例输入
+5 
+at 
+touch 
+cheat 
+choose 
+tact 
+a 
+样例输出
+23
+
+代码
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class 单词接龙 {
+	static int n,an=0,ans=0;
+	static String s[];
+	static int yc[][];
+	static int vis[];
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		s=new String[30];
+		yc=new int[30][30];
+		vis=new int[30];
+		Arrays.fill(vis,0);
+		n=input.nextInt();
+		for(int i=1;i<=n;i++) {
+			s[i]=input.next();
+		}
+		String ch=input.next();
+		for(int i=1;i<=n;i++) {
+			for(int j=1;j<=n;j++) {
+				yc[i][j]=mt(i,j);
+			}
+		}
+		for(int i=1;i<=n;i++) {
+			if(s[i].charAt(0)==ch.charAt(0)) {
+				vis[i]++;
+				an=s[i].length();
+				dfs(i);
+				vis[i]=0;
+			}
+		}
+		System.out.println(ans);
+	}
+	static int mt(int x,int y) {
+		boolean p=true;
+		int ky=0;
+		for(int k=s[x].length()-1;k>=0;k--) {
+			for(int kx=k;kx<s[x].length();kx++) {
+				if(s[x].charAt(kx)!=s[y].charAt(ky++)){
+					p=false;
+					break;
+				}
+			}
+			if(p) {
+				return s[x].length()-k;
+			}
+			ky=0;
+			p=true;
+		}
+		return 0;
+	}
+	static void dfs(int p) {
+		boolean jx=false;
+		for(int j=1;j<=n;j++) {
+			if(vis[j]>=2) {
+				continue;
+			}
+			if(yc[p][j]==0) {
+				continue;
+			}
+			if(yc[p][j]==s[p].length()||yc[p][j]==s[j].length()) {
+				continue;
+			}
+			an+=s[j].length()-yc[p][j];
+			vis[j]++;
+			jx=true;
+			dfs(j);
+			an-=s[j].length()-yc[p][j];
+			vis[j]--;
+		}
+		if(!jx) {
+			ans=Math.max(ans,an);
+		}
+		return;
+	}
+}
